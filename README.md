@@ -1,7 +1,7 @@
 # DQN-for-CartPole-v1
 Playing Atari with Deep Reinforcement Learning 논문을 바탕으로 cartpole v1 문제 해결
 
-##문제
+## 문제
 https://gymnasium.farama.org/environments/classic_control/cart_pole/ 에 소개되는  CartPole-v1 환경에 대해  https://arxiv.org/abs/1312.5602 논문에 소개된  DQN 강화학습 알고리즘으로 학습을 하여
 Episode 전체 기간 동안 받은 Reward(즉, Episode Reward)의 총 합 500을 얻을 수 있는 에이전트를 개발하시오.
 - 최종 결과물은 github 내에 웹 페이지를 구성하여 Markdown으로 작성하여 제시하시오.
