@@ -3,8 +3,11 @@ Playing Atari with Deep Reinforcement Learning 논문을 바탕으로 cartpole v
 
 # 목차
   -문제
+  
   -논문 설명
+  
   -구현 방식
+  
   -결과
 
 ## 문제
