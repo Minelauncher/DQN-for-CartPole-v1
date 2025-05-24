@@ -2,10 +2,10 @@
 Playing Atari with Deep Reinforcement Learning 논문을 바탕으로 cartpole v1 문제 해결
 
 # 목차
-  -문제\n
-  -논문 설명\n
-  -구현 방식\n
-  -결과\n
+  -문제
+  -논문 설명
+  -구현 방식
+  -결과
 
 ## 문제
 https://gymnasium.farama.org/environments/classic_control/cart_pole/ 에 소개되는  CartPole-v1 환경에 대해  https://arxiv.org/abs/1312.5602 논문에 소개된  DQN 강화학습 알고리즘으로 학습을 하여
