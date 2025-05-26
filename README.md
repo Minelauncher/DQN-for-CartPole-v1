@@ -4,7 +4,7 @@ Playing Atari with Deep Reinforcement Learning 논문을 바탕으로 cartpole v
 # 목차
   -문제
   
-  -논문 설명
+  -배경 설명
   
   -구현 방식
   
@@ -19,12 +19,14 @@ Episode 전체 기간 동안 받은 Reward(즉, Episode Reward)의 총 합 500�
 - 해당 github 페이지 내에 Episode Reward로서 500을 얻어 낸 화면을 캡쳐하여 해당 이미지를 함께 보이도록 하시오.
 - 해당 github 페이지 내에 위 에이전트가  Cartpole을 오랫동안 세우는 영상을 임베드하고 클릭을 하면 영상이 플레이되도록 하시오.
 
-## 논문 설명
+## 배경 설명
 
 ### 1. 행동 집합
 $$
 A = \{1, \ldots, K\}
 $$
+
+Cartpole에서 행동 집합은 앞과 뒤 2가지이다.
 
 ### 2. 관측 및 상태 정의
 $$
@@ -32,12 +34,15 @@ x_t \in \mathbb{R}^d, \quad r_t \quad\text{(Reward)}
 s_t = x_1, a_1, x_2, \ldots, a_{t-1}, x_t
 $$
 
+
+
 ### 3. 할인된 누적 보상
 $$
 R_t = \sum_{t'=t}^{T} \gamma^{\,t'-t}\,r_{t'}
 $$
+
 한 에피소드 내에서 보상을 할인율을 적용하여 미래 보상의 합을 계산한다.
-사용한 $$ \gamma $$는 0.99를 사용하였다.
+사용한 $$\gamma$$ 는 0.99를 사용하였다.
 
 ### 4. 최적 행동 가치 함수 정의
 $$
