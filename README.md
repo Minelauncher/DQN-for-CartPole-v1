@@ -21,6 +21,8 @@ Episode 전체 기간 동안 받은 Reward(즉, Episode Reward)의 총 합 500�
 
 ## 논문 설명
 
+R_t=∑_(t^'=t)^T▒〖γ^(t^'-t) r_(t^' ) 〗
+
 ## 구현 방식
 
 ## 결과
