@@ -28,32 +28,32 @@ $$
 
 ### 2. 관측 및 상태 정의
 $$
-x_t \in \mathbb{R}^d, \quad r_t \quad\text{(보상)}
+x_t \in \mathbb{R}^d, \quad r_t \quad\text{(Reward)}
 s_t = x_1, a_1, x_2, \ldots, a_{t-1}, x_t
 $$
 
 ### 3. 할인된 누적 보상
 $$
-R_t = \sum_{t'=t}^{T} \gamma^{\,t'-t}\,r_{t'} 
+R_t = \sum_{t'=t}^{T} \gamma^{\,t'-t}\,r_{t'}
 $$
 
 ### 4. 최적 행동 가치 함수 정의
-$$ 
-Q^*(s,a) = \max_{\pi}\,\mathbb{E}\bigl[R_t \mid s_t = s,\,a_t = a,\,\pi\bigr] 
+$$
+Q^*(s,a) = \max_{\pi}\,\mathbb{E}\bigl[R_t \mid s_t = s,\,a_t = a,\,\pi\bigr]
 $$
 
 ### 5. Bellman 최적 방정식
-$$ 
+$$
 Q^*(s,a) = \mathbb{E}_{s'\sim E}\bigl[\,r + \gamma \max_{a'}Q^*(s',a') \mid s,a\bigr]
 $$
 
 ### 6. 값 반복 업데이트
-$$ 
-Q_{i+1}(s,a) = \mathbb{E}\bigl[\,r + \gamma \max_{a'}Q_i(s',a') \mid s,a\bigr] 
+$$
+Q_{i+1}(s,a) = \mathbb{E}\bigl[\,r + \gamma \max_{a'}Q_i(s',a') \mid s,a\bigr]
 $$
 
 ### 7. 손실 함수 정의
-$$ 
+$$
 L_i(\theta_i) 
   = \mathbb{E}_{s,a\sim\rho(\cdot)}
     \Bigl[\bigl(y_i - Q(s,a;\theta_i)\bigr)^2\Bigr],
@@ -62,7 +62,7 @@ y_i = \mathbb{E}_{s'\sim E}\bigl[\,r + \gamma \max_{a'}Q(s',a';\theta_{i-1}) \mi
 $$
 
 ### 8. 손실 함수의 그래디언트
-$$ 
+$$
 \nabla_{\theta_i}L_i(\theta_i)
   = \mathbb{E}_{s,a\sim\rho(\cdot);\,s'\sim E}
     \Bigl[\bigl(r + \gamma \max_{a'}Q(s',a';\theta_{i-1})
@@ -71,10 +71,10 @@ $$
 $$
 
 ### 9. 업데이트 시 사용되는 타깃 값
-$$ 
+$$
 y_j =
 \begin{cases}
-  r_j, 
+  r_j,
   &\text{if }\phi_{j+1}\text{ is terminal},\\
   r_j + \gamma \max_{a'}Q(\phi_{j+1},a';\theta),
   &\text{otherwise}.
