@@ -22,7 +22,9 @@ Episode 전체 기간 동안 받은 Reward(즉, Episode Reward)의 총 합 500�
 ## 논문 설명
 
 ### 1. 행동 집합
-$$ A = \{1, \ldots, K\} $$
+$$
+A = \{1, \ldots, K\}
+$$
 
 ### 2. 관측 및 상태 정의
 $$ x_t \in \mathbb{R}^d, \quad r_t \quad\text{(보상)} $$
