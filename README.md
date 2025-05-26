@@ -44,7 +44,7 @@ $$
 
 ### 5. Bellman 최적 방정식
 $$
-Q^*(s,a) = \mathbb{E}_{s'\sim E}\bigl[\,r + \gamma \max_{a'}Q^*(s',a') \mid s,a\bigr]
+Q^*(s,a) = \mathbb{E}_{s'\sim E}\bigl[r + \gamma \max_{a'}Q^*(s',a') \mid s,a\bigr]
 $$
 
 ### 6. 값 반복 업데이트
