@@ -44,7 +44,7 @@ $$
 
 ### 5. Bellman 최적 방정식
 $$ 
-Q^*(s,a) = \mathbb{E}_{s'\sim E}\bigl[\,r + \gamma \max_{a'}Q^*(s',a') \mid s,a\bigr] 
+Q^*(s,a) = \mathbb{E}_{s'\sim E}\bigl[\,r + \gamma \max_{a'}Q^*(s',a') \mid s,a\bigr]
 $$
 
 ### 6. 값 반복 업데이트
@@ -54,17 +54,20 @@ $$
 
 ### 7. 손실 함수 정의
 $$ 
-L_i(\theta_i) = \mathbb{E}_{s,a\sim\rho(\cdot)}
+L_i(\theta_i) 
+  = \mathbb{E}_{s,a\sim\rho(\cdot)}
     \Bigl[\bigl(y_i - Q(s,a;\theta_i)\bigr)^2\Bigr],
 \quad
-y_i = \mathbb{E}_{s'\sim E}\bigl[\,r + \gamma \max_{a'}Q(s',a';\theta_{i-1}) \mid s,a\bigr] 
+y_i = \mathbb{E}_{s'\sim E}\bigl[\,r + \gamma \max_{a'}Q(s',a';\theta_{i-1}) \mid s,a\bigr]
 $$
 
 ### 8. 손실 함수의 그래디언트
 $$ 
-\nabla_{\theta_i}L_i(\theta_i) = \mathbb{E}_{s,a\sim\rho(\cdot);\,s'\sim E}
-\Bigl[\bigl(r + \gamma \max_{a'}Q(s',a';\theta_{i-1}) - Q(s,a;\theta_i)\bigr)\,
-\nabla_{\theta_i}Q(s,a;\theta_i)\Bigr] 
+\nabla_{\theta_i}L_i(\theta_i)
+  = \mathbb{E}_{s,a\sim\rho(\cdot);\,s'\sim E}
+    \Bigl[\bigl(r + \gamma \max_{a'}Q(s',a';\theta_{i-1})
+                   - Q(s,a;\theta_i)\bigr)\,
+          \nabla_{\theta_i}Q(s,a;\theta_i)\Bigr]
 $$
 
 ### 9. 업데이트 시 사용되는 타깃 값
@@ -75,7 +78,7 @@ y_j =
   &\text{if }\phi_{j+1}\text{ is terminal},\\
   r_j + \gamma \max_{a'}Q(\phi_{j+1},a';\theta),
   &\text{otherwise}.
-\end{cases} 
+\end{cases}
 $$
 
 ## 구현 방식
