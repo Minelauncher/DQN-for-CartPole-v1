@@ -30,7 +30,7 @@ Cartpole에서 행동 집합은 앞과 뒤 2가지이다.
 
 ### 2. 관측 및 상태 정의
 $$
-x_t \in \mathbb{R}^d, \quad r_t \quad\text{(Reward)}
+x_t \in \mathbb{R}^d, \quad r_t \quad\text{(Reward)   }
 s_t = x_1, a_1, x_2, \ldots, a_{t-1}, x_t
 $$
 
