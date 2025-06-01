@@ -3,6 +3,12 @@ Playing Atari with Deep Reinforcement Learning 논문을 바탕으로 cartpole v
 
 [Buffer.py](https://github.com/Minelauncher/DQN-for-CartPole-v1/blob/main/Buffer.py)
 
+[QNetwork.py](https://github.com/Minelauncher/DQN-for-CartPole-v1/blob/main/QNetwork.py)
+
+[plot.py](https://github.com/Minelauncher/DQN-for-CartPole-v1/blob/main/plot.py)
+
+[train.py](https://github.com/Minelauncher/DQN-for-CartPole-v1/blob/main/train.py)
+
 # 목차
   -문제
   
