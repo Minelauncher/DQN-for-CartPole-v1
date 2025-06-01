@@ -96,6 +96,8 @@ E_{s,a\sim\rho,\,s'}\Bigl[\,
 \Bigr]
 $$
 
+여기서 핵심은 이전 파라미터를 가진 QNetwork가 필요하다는 것이다.
+
 ### 9. 업데이트 시 사용되는 타깃 값
 
 $$
@@ -120,6 +122,34 @@ $$
     else:
         with torch.no_grad(): # 자동 그라디언트 계산이 순전파만 할 시에는 필요없으므로 미분트리를 생성하지 않는다.
             action = policy_net(state_t.unsqueeze(0)).argmax(1).item() # 네트워크를 통해 얻은 가치에서 최고 가치를 지니는 행동 선택(탐욕적)
+```
+
+샘플링된 상태 환경 조합을 사용하여 miniBatch학습을 진행한다.
+Batch 학습이기 때문에 배치의 기울기를 동시에 고려해서 학습하고
+과거 Replay를 활용하는 논문의 기작과도 일치한다.
+```python
+        # 이전 파라미터를 타깃용으로 복사
+        target_net = QNetwork(obs_dim, 128, n_actions)
+        target_net.load_state_dict(policy_net.state_dict())
+
+        # 배치 샘플링
+        S, A, R, S_next, D = replay_buffer.sample(batch_size)
+
+        # 현재 Q값
+        q_values = policy_net(S).gather(1, A.unsqueeze(1)).squeeze(1)
+
+        # 타깃 계산 (이전 파라미터로만)
+        with torch.no_grad():
+            q_values_next = target_net(S_next) # shape: (batch_size, action_dim)
+            max_vals, max_idxs = q_values_next.max(dim=1) # 행동 차원 기준 최고값 선택 0,1인데 행동은 1에
+            q_next = max_vals # max_vals는 탐욕적 방법으로 가치 높은 것 선택 shape: (batch_size,)
+            target = R + gamma * q_next * (1-D) # D가 참이면 끝이므로 미래 보상 고려할 필요가 없다.
+
+        # 손실 및 역전파
+        loss = torch.nn.functional.mse_loss(q_values, target) # 토치 내부에 구현되어 있는 MSE 손실함수 사용
+        optimizer.zero_grad() # 옵티마이저 초기화
+        loss.backward() # 자동 그라디언트 전파
+        optimizer.step() # 옵티마이저 적용
 ```
 
 ## 결과
