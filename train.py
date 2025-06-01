@@ -1,6 +1,7 @@
 import random
 
 import gymnasium as gym # 카트폴 환경 구현용
+from gymnasium.wrappers import RecordVideo
 import torch # 파이토치
 import torch.optim as optim # 파이토치 옵티마이저 부분(ADAM 옵티마이저 사용을 위해서)
 
@@ -27,8 +28,8 @@ batch_size = 32 # 미니배치 사이즈
 
 # 가치 높으면 바로 선택하는 탐욕적 기법을 기반으로 하지만 학습 초반에는 행동의 가치가 보장되지 않으므로 확률적으로 다른 행동을 취해 데이터 다양성을 높인다.
 epsilon_start = 1.0 
-epsilon_final = 0.1
-epsilon_decay = 20000 
+epsilon_final = 0.01
+epsilon_decay = 10000 
 
 num_steps = 100000 # 환경과 상호작용할 단위시간의 수(step의 수)
 
@@ -38,6 +39,7 @@ losses = [] # 손실 리스트
 predict_maxQ = [] # 예측 최대 Q 리스트
 
 best_saved = False # 목표에 도달한 저장본이 있는가?
+best_count = 0 # 목표에 도달한 수
 
 state, _ = env.reset(seed=0) # 상태 초기화(시드를 고정한다) (-0.05, 0.05)도 내에서 초기화
 episode_reward = 0 # 에피소드 당 보상 변수 초기화
@@ -79,7 +81,7 @@ for step in range(1, num_steps + 1):
 
     # 버퍼 충분할 때만 업데이트(미니배치 수를 넘는 시점부터)
     if len(replay_buffer) >= batch_size:
-        # 이전 파라미터를 타깃용으로 복사 (freeze)
+        # 이전 파라미터를 타깃용으로 복사
         target_net = QNetwork(obs_dim, 128, n_actions)
         target_net.load_state_dict(policy_net.state_dict())
 
@@ -117,10 +119,12 @@ for step in range(1, num_steps + 1):
         episode_rewards.append(episode_reward) # 에피소드 보상 저장
         
         if not best_saved and episode_reward >= 500: # 에피소드가 보상 500을 달성하여 성공하였다면
-            torch.save(policy_net.state_dict(), "checkpoints/best_policy.pth") # 상대경로에 네트워크 저장
-            print("보상",episode_reward," 달성. 모델 저장 후 학습 종료.")
-            best_saved = True # 가장 좋은 저장본 존재
-            break # 학습의 목적을 달성했으므로 학습 탈출
+            best_count += 1
+            if best_count >= 10:
+                torch.save(policy_net.state_dict(), "checkpoints/best_policy.pth") # 상대경로에 네트워크 저장
+                print("보상",episode_reward," 달성. 모델 저장 후 학습 종료.")
+                best_saved = True # 가장 좋은 저장본 존재
+                break # 학습의 목적을 달성했으므로 학습 탈출
 
         episode_reward = 0 # 에피소드 보상 초기화
         state, _ = env.reset() # 상태 초기화
@@ -133,18 +137,43 @@ if best_saved:
     print("▶ 저장된 정책으로 재생 시작")
     # 모델 로드
     policy_net.load_state_dict(torch.load("checkpoints/best_policy.pth"))
-
+    """
     # 렌더 모드 human 으로 새 환경
     render_env = gym.make("CartPole-v1", render_mode="human")
     state, _ = render_env.reset(seed=0)
     done = False
     while not done:
         with torch.no_grad():
+            # policy_net은 학습된 네트워크
             action = policy_net(torch.tensor(state, dtype=torch.float32).unsqueeze(0)).argmax(1).item()
         state, _, terminated, truncated, _ = render_env.step(action)
         done = terminated or truncated
         render_env.render()
     render_env.close()
+    """
+
+    # 1) render_mode='rgb_array'로 env 생성
+    eval_env = gym.make("CartPole-v1", render_mode="rgb_array")
+
+    # 2) 평가 환경 래핑: videos/ 폴더에 hit500-episode-*.mp4로 저장
+    eval_env = RecordVideo(
+        eval_env,
+        video_folder="videos",
+        name_prefix="hit500",
+        episode_trigger=lambda episode_id: True  # 모든 에피소드 녹화
+    )
+
+    # 3) 리셋 및 단일 에피소드 실행
+    obs, _ = eval_env.reset(seed=42)
+    done = False
+    while not done:
+        with torch.no_grad():
+            # policy_net은 학습된 네트워크
+            action = policy_net(torch.tensor(obs, dtype=torch.float32).unsqueeze(0)).argmax(1).item()
+        obs, reward, terminated, truncated, _ = eval_env.step(action)
+        done = terminated or truncated
+        eval_env.render()
+    eval_env.close()
 
 
 plot.print_plot(predict_maxQ=predict_maxQ, episode_rewards=episode_rewards, losses=losses)
