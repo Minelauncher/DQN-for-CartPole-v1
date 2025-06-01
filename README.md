@@ -1,6 +1,8 @@
 # DQN-for-CartPole-v1
 Playing Atari with Deep Reinforcement Learning 논문을 바탕으로 cartpole v1 문제 해결
 
+[Buffer.py](https://github.com/Minelauncher/DQN-for-CartPole-v1/blob/main/Buffer.py)
+
 # 목차
   -문제
   
