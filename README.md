@@ -154,5 +154,9 @@ Batch 학습이기 때문에 배치의 기울기를 동시에 고려해서 학�
 
 ## 결과
 
+
+
+![image](https://github.com/user-attachments/assets/b9fb65be-31aa-4a7e-a631-48bda8ef2ca1)
+
 https://github.com/user-attachments/assets/3eb47547-e380-42a3-8290-9ca912b56ee9
 
